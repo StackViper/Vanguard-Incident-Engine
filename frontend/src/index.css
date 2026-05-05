@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4ade80;
+  --color-secondary: #2d3b35;
+  --color-bg-base: #111715;
+  --color-surface: #161e1b;
+  --color-card: #1c2521;
+  --color-border-dim: #2a3530;
+  --color-info: #5a8e6b;
+  --color-warning: #b3a34a;
+  --color-critical: #b35a5a;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-base text-slate-400 min-h-screen antialiased selection:bg-primary/10;
+    font-family: 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-white tracking-tight;
+  }
+}
+
+@layer components {
+  .workspace-panel {
+    @apply bg-card border border-border-dim rounded-md;
+  }
+
+  .btn-soft {
+    @apply px-4 py-2 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all border border-border-dim bg-surface hover:bg-border-dim text-slate-300;
+  }
+
+  .indicator-line {
+    @apply absolute left-0 top-0 bottom-0 w-1;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-border-dim rounded-full hover:bg-slate-700 transition-colors;
+}
+
+/* Remove decorative backgrounds for a clean workspace feel */
+.workspace-bg {
+  @apply bg-bg-base;
+}
