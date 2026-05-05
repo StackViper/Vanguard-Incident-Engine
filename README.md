@@ -6,8 +6,38 @@ Built with a stunning **Forest Glass** aesthetic and a robust backend stack: **F
 
 ---
 
+## System Design Overview
+
+```mermaid
+graph TD
+    subgraph "Ingress Layer"
+        API[FastAPI Ingestion API] -->|HTTP| Queue[RabbitMQ]
+    end
+    subgraph "Processing Layer"
+        Queue -->|Consume| Worker[Worker Service]
+        Worker -->|Cache| Redis[Redis Guard]
+        Worker -->|Store| DB[PostgreSQL]
+        Worker -->|Archive| Mongo[MongoDB]
+    end
+    subgraph "Presentation Layer"
+        Worker -->|Events| WS[WebSocket Server]
+        WS -->|UI Updates| UI[React Dashboard]
+    end
+    API -->|Rate Limit| Guard[Redis Guard]
+    Guard --> API
+```
+
+* **FastAPI**: Handles inbound telemetry, validates, and enqueues.
+* **RabbitMQ**: Decouples ingestion from processing, provides back‑pressure.
+* **Worker Service**: Consumes messages, applies debouncing, writes to stores.
+* **Redis Guard**: Token‑bucket rate limiting and short‑term cache for deduplication.
+* **PostgreSQL**: Core relational ledger for incidents and audits.
+* **MongoDB**: Immutable raw pulse archive.
+* **WebSocket Server**: Pushes real‑time updates to the UI.
+* **React Dashboard**: Visualizes pulse flow with glassmorphic UI.
 
 ---
+
 
 ### The Pulse Flow
 1. **Pulse Emission**: High-throughput telemetry signals (pulses) arrive at the Ingestion Nexus. 
